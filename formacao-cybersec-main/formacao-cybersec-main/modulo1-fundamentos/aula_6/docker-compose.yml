@@ -1,0 +1,41 @@
+# docker-compose.yml para o Lab da Aula #6 com IPs Predefinidos e Kali Customizado
+networks:
+  aula6_network:
+    driver: bridge
+    ipam: # Configuração para gerenciar o pool de IPs
+      config:
+        - subnet: 172.18.0.0/24 # Define a sub-rede da nossa rede Docker
+          gateway: 172.18.0.1 # O gateway padrão (geralmente o próprio Docker)
+
+services:
+  kali:
+    build: ./kali-custom # Instrução para construir a imagem a partir do Dockerfile
+    container_name: kali_lab_6
+    tty: true
+    networks:
+      aula6_network:
+        ipv4_address: 172.18.0.10 # IP fixo para o Kali
+    volumes:
+      - ./kali-data:/root
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+
+  web-server-target:
+    image: nginx:alpine
+    container_name: web_server_target_lab_6
+    ports:
+      - "8080:80"
+    networks:
+      aula6_network:
+        ipv4_address: 172.18.0.20 # IP fixo para o web-server-target
+
+  dns-server:
+    image: coredns/coredns:latest
+    container_name: dns_server_lab_6
+    command: -conf /etc/coredns/Corefile
+    volumes:
+      - ./Corefile:/etc/coredns/Corefile
+    networks:
+      aula6_network:
+        ipv4_address: 172.18.0.30 # IP fixo para o dns-server

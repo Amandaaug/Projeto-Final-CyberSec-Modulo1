@@ -1,0 +1,84 @@
+# docker-compose.yml
+# Orquestra a criação da rede corporativa simulada para o laboratório de Port Scanning.
+# Versão corrigida para compatibilidade com múltiplas arquiteturas e configuração do mail_server.
+
+services:
+  # --- O Atacante ---
+  attacker:
+    container_name: attacker-1
+    build:
+      context: ./attacker
+    platform: linux/amd64 # Garante compatibilidade para o atacante também
+    cap_add:
+      - NET_ADMIN # Permissões de rede necessárias para scans avançados
+    networks:
+      dmz_net:
+        ipv4_address: 172.18.0.100 # IP fixo para o atacante na DMZ
+      internal_net:
+        ipv4_address: 172.19.0.100 # IP fixo para o atacante na rede interna
+    tty: true # Mantém o container rodando
+    stdin_open: true # Permite interação com o terminal
+
+  # --- Servidores na DMZ (Rede Pública) ---
+  web_server:
+    container_name: web_server
+    build:
+      context: ./services/web_server
+    platform: linux/amd64 # Garante compatibilidade
+    networks:
+      dmz_net:
+        ipv4_address: 172.18.0.2
+
+  mail_server:
+    container_name: mail_server
+    build:
+      context: ./services/mail_server
+    platform: linux/amd64 # Garante compatibilidade
+    environment:
+      - SMTP_SERVER=kensei.lab # Define o nome do servidor de e-mail
+      - SERVER_HOSTNAME=kensei.lab # Define o hostname para o servidor
+    networks:
+      dmz_net:
+        ipv4_address: 172.18.0.3
+
+  # --- Servidores na Rede Interna (Privada) ---
+  fileshare_server:
+    container_name: fileshare_server
+    build:
+      context: ./services/fileshare_server
+    platform: linux/amd64 # Garante compatibilidade
+    networks:
+      internal_net:
+        ipv4_address: 172.19.0.2
+
+  database_server:
+    container_name: database_server
+    build:
+      context: ./services/database_server
+    platform: linux/amd64 # Garante compatibilidade
+    environment:
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
+    networks:
+      internal_net:
+        ipv4_address: 172.19.0.3
+
+  dev_machine:
+    container_name: dev_machine
+    build:
+      context: ./services/dev_machine
+    networks:
+      internal_net:
+        ipv4_address: 172.19.0.4
+
+# --- Definição das Redes ---
+networks:
+  dmz_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/24
+  internal_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.19.0.0/24

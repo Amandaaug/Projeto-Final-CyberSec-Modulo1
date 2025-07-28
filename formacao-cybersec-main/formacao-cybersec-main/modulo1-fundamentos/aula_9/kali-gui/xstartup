@@ -1,0 +1,6 @@
+#!/bin/bash
+# Descomente a linha abaixo se quiser um fundo cinza simples
+# unset SESSION_MANAGER
+# unset DBUS_SESSION_BUS_ADDRESS
+
+startxfce4 &

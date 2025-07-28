@@ -1,0 +1,12 @@
+# Corefile para o dns-server
+. {
+    health
+    ready
+    log
+    errors
+    hosts {
+        172.18.0.20 target.lab
+        fallthrough # MUITO IMPORTANTE! Garante que ele encaminhe outras requisições
+    }
+    forward . 8.8.8.8 # Encaminha requisições desconhecidas para o DNS público do Google
+}

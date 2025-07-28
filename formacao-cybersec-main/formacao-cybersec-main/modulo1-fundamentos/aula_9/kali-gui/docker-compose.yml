@@ -1,0 +1,9 @@
+services:
+  kali-gui:
+    build: .
+    container_name: kali_gui_kensei
+    ports:
+      - "5901:5901"
+    environment:
+      # Você pode mudar a senha aqui se quiser
+      - VNC_PASSWORD=kensei

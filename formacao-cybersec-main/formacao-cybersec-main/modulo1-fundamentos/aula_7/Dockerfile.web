@@ -1,0 +1,20 @@
+# Dockerfile para o servidor web Flask
+FROM python:3.9-slim-buster
+
+LABEL maintainer="Kensei CyberSec Lab <info@kensei.com>"
+
+# Define o diretório de trabalho dentro do contêiner
+WORKDIR /app
+
+# Copia os arquivos de requisitos e a aplicação
+COPY requirements.txt .
+COPY app.py .
+
+# Instala as dependências
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Expõe a porta que a aplicação Flask irá rodar
+EXPOSE 8080
+
+# Comando para rodar a aplicação Flask
+CMD ["python", "app.py"]

@@ -1,0 +1,9 @@
+# docker-compose.yml atualizado para o lab CLI
+services:
+  kensei-kali-cli:
+    # A mudança está aqui: 'build: .' diz para construir a imagem a partir do Dockerfile na pasta atual
+    build: .
+    container_name: kali_cli_kensei
+    command: tail -f /dev/null
+    tty: true
+    stdin_open: true

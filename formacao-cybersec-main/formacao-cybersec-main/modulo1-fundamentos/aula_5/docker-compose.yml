@@ -1,0 +1,19 @@
+services:
+  kali:
+    build: ./kali
+    container_name: kali_lab_5
+    tty: true
+    networks:
+      - labnet
+
+  lab_target:
+    build: ./lab_target
+    container_name: lab_target
+    ports:
+      - "8080:80"
+    networks:
+      - labnet
+
+networks:
+  labnet:
+    driver: bridge

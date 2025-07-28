@@ -1,0 +1,14 @@
+# Mini CTF Flags - Módulo 1
+
+## Flag 1: Acesso ao container Ubuntu
+- Caminho: /root/flag1.txt
+- Conteúdo: FLAG{consegui_acessar_o_ubuntu}
+
+## Flag 2: Varredura de rede e descoberta de container
+- Desafio: Usar nmap no Kali para descobrir a DVWA
+- Conteúdo esperado: FLAG{encontrei_o_dvwa_na_rede}
+
+## Flag 3: Exploração Web
+- Acesse DVWA e execute uma SQLi simples
+- Após sucesso, criar um arquivo em: /var/www/html/flag3.txt
+- Conteúdo: FLAG{sql_injection_realizada_com_sucesso}
